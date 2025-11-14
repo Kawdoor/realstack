@@ -87,6 +87,7 @@ function App() {
 
   const handleViewAll = () => {
     setView('all-projects');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const scrollToSection = (sectionId: string) => {
@@ -171,7 +172,7 @@ function App() {
               className="flex items-center gap-2 text-xl font-light tracking-widest text-neutral-900 transition-colors hover:text-neutral-600"
             >
               <Home size={24} />
-              REAL ESTATE
+              REAL STACK
             </button>
 
             {/* Menú de navegación central */}
@@ -268,7 +269,7 @@ function App() {
             className="flex items-center gap-2 text-xl font-light tracking-widest text-neutral-900 transition-colors hover:text-neutral-600"
           >
             <Home size={24} />
-            REAL ESTATE
+            REAL STACK
           </button>
           
           {/* Menú de navegación central */}

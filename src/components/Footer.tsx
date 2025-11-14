@@ -14,7 +14,7 @@ export default function Footer({ email, phone }: FooterProps) {
         <div className="grid grid-cols-1 gap-12 border-b border-white/10 pb-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Sobre nosotros */}
           <div>
-            <h3 className="mb-6 text-lg font-light tracking-widest">REAL ESTATE</h3>
+            <h3 className="mb-6 text-lg font-light tracking-widest">REAL STACK</h3>
             <p className="mb-6 font-light leading-relaxed text-white/70">
               Desarrollamos proyectos inmobiliarios de lujo con más de 15 años de
               experiencia en el mercado.
