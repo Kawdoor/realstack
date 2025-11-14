@@ -4,7 +4,8 @@ import ProjectsManager from '../components/admin/ProjectsManager';
 import ClientsManager from '../components/admin/ClientsManager';
 import OperationsManager from '../components/admin/OperationsManager';
 import ConfigManager from '../components/admin/ConfigManager';
-import { Building2, Users, FileText, Settings, Home } from 'lucide-react';
+import Login from './Login';
+import { Building2, Users, FileText, Settings, Home, LogOut } from 'lucide-react';
 
 type Tab = 'projects' | 'clients' | 'operations' | 'config';
 
@@ -13,14 +14,31 @@ interface AdminProps {
 }
 
 export default function Admin({ onBackToHome }: AdminProps) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [activeTab, setActiveTab] = useState<Tab>('projects');
   const [projects, setProjects] = useState<Project[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [operations, setOperations] = useState<Operation[]>([]);
 
   useEffect(() => {
-    loadData();
+    checkAuth();
   }, []);
+
+  const checkAuth = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    setIsAuthenticated(!!session);
+    setIsCheckingAuth(false);
+    
+    if (session) {
+      loadData();
+    }
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setIsAuthenticated(false);
+  };
 
   const loadData = async () => {
     const [projectsRes, clientsRes, operationsRes] = await Promise.all([
@@ -41,6 +59,25 @@ export default function Admin({ onBackToHome }: AdminProps) {
     { id: 'config' as Tab, label: 'Configuración', icon: Settings },
   ];
 
+  if (isCheckingAuth) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
+        <div className="text-center">
+          <div className="mb-4 text-lg font-light tracking-wide text-neutral-600">
+            Cargando...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Login onLoginSuccess={() => {
+      setIsAuthenticated(true);
+      loadData();
+    }} />;
+  }
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <header className="border-b border-neutral-200 bg-white">
@@ -48,13 +85,22 @@ export default function Admin({ onBackToHome }: AdminProps) {
           <h1 className="text-2xl font-light tracking-wide text-neutral-900">
             Panel de Administración
           </h1>
-          <button
-            onClick={onBackToHome}
-            className="flex items-center gap-2 border border-neutral-300 px-6 py-2 text-sm tracking-wider transition-all hover:border-neutral-900"
-          >
-            <Home className="h-4 w-4" strokeWidth={1.5} />
-            VOLVER AL SITIO
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 border border-neutral-300 px-6 py-2 text-sm tracking-wider text-red-600 transition-all hover:border-red-600 hover:bg-red-50"
+            >
+              <LogOut className="h-4 w-4" strokeWidth={1.5} />
+              CERRAR SESIÓN
+            </button>
+            <button
+              onClick={onBackToHome}
+              className="flex items-center gap-2 border border-neutral-300 px-6 py-2 text-sm tracking-wider transition-all hover:border-neutral-900"
+            >
+              <Home className="h-4 w-4" strokeWidth={1.5} />
+              VOLVER AL SITIO
+            </button>
+          </div>
         </div>
       </header>
 
