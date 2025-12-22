@@ -172,12 +172,20 @@ VITE_SUPABASE_ANON_KEY=tu_anon_key_de_supabase
 4. **Configurar Supabase**
 
 - Crea un proyecto en [Supabase](https://supabase.com)
-- Ejecuta las migraciones SQL ubicadas en `supabase/migrations/` en el SQL Editor de Supabase (en orden)
+- Ejecuta las migraciones SQL en el SQL Editor de Supabase en el siguiente orden:
+  1. `20251113211932_create_projects_schema.sql`
+  2. `20251114000001_add_favorites_table.sql`
+  3. `20251114000002_add_project_details.sql`
+  4. `20251114000003_add_user_roles.sql`
+  5. `20251114000004_add_appointments.sql`
+  6. `20251114000005_add_project_coordinates.sql`
 - Habilita Email Authentication en Authentication > Providers
 
 5. **Crear usuario administrador**
 
-Sigue las instrucciones en [ROLES_SETUP.md](./ROLES_SETUP.md) para configurar el usuario admin principal (`admin@realstack.com`)
+Sigue las instrucciones en [ROLES_SETUP.md](./ROLES_SETUP.md) para configurar el usuario admin principal.
+
+**Nota**: Por defecto, el sistema asigna automáticamente el rol de administrador al usuario con email `admin@realstack.com`. Puedes usar este email o modificar la lógica de asignación de roles según tus necesidades en la migración `20251114000003_add_user_roles.sql`.
 
 6. **Ejecutar en modo desarrollo**
 ```bash
